@@ -1,0 +1,30 @@
+{
+  "name": "mirror-techy",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "tailwind:init": "tailwindcss init -p"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.7.0",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.17",
+    "vite": "^7.0.6"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.53.0",
+    "emailjs-com": "^3.2.0",
+    "framer-motion": "^12.23.11",
+    "lucide-react": "^0.533.0",
+    "react": "^19.1.1",
+    "react-countup": "^6.5.3",
+    "react-dom": "^19.1.1",
+    "react-icons": "^5.5.0",
+    "react-router-dom": "^7.7.1",
+    "react-scroll": "^1.9.3"
+  }
+}
