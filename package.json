@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 {
   "name": "mirror-techy",
   "version": "1.0.0",
@@ -29,7 +29,7 @@
     "react-scroll": "^1.9.3"
   }
 }
-=======
+ 
 {
   "name": "mirror-techy",
   "version": "1.0.0",
@@ -60,4 +60,4 @@
     "react-scroll": "^1.9.3"
   }
 }
->>>>>>> 6e660a5665e8ba0aeb830d396a266ce5aad78e30
+ 6e660a5665e8ba0aeb830d396a266ce5aad78e30
