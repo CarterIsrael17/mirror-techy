@@ -1,104 +1,85 @@
-// src/pages/Projects.jsx
-import { useEffect, useState } from "react";
-import { supabase } from "../supabaseClient";
-
-const categories = [
-  "All",
-  "UI/UX",
-  "E-commerce",
-  "Mobile App",
-  "Full Stack",
-  "Wix",
-  "Shopify",
-  "Squarespace",
-  "WordPress",
-  "Framer",
-];
+import React, { useEffect, useState } from "react";
+import supabase from "../config/supabaseClient";
 
 const Projects = () => {
   const [projects, setProjects] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("All");
-
-  const fetchProjects = async () => {
-    const { data, error } = await supabase
-      .from("projects")
-      .select("*")
-      .order("id", { ascending: false });
-    if (!error) setProjects(data || []);
-  };
+  const [filter, setFilter] = useState("all");
 
   useEffect(() => {
+    const fetchProjects = async () => {
+      const { data, error } = await supabase.from("projects").select("*");
+      if (error) {
+        console.error("Error fetching projects:", error);
+      } else {
+        setProjects(data);
+      }
+    };
+
     fetchProjects();
   }, []);
 
   const filteredProjects =
-    selectedCategory === "All"
+    filter === "all"
       ? projects
-      : projects.filter((p) => p.category === selectedCategory);
+      : projects.filter(
+          (project) => project.category.toLowerCase() === filter
+        );
 
   return (
-    <section
-      className="relative py-20 bg-cover bg-center text-white"
-      style={{ backgroundImage: "url('/portfolio.jpg')" }} // Your image in /public
-    >
-      {/* 🔹 Slight black overlay */}
-      <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+    <section className="py-12 px-4 md:px-16 bg-gradient-to-b from-blue-50 to-white">
+      <h2 className="text-3xl md:text-4xl font-bold text-center mb-8">
+        My Projects
+      </h2>
 
-      <div className="relative max-w-7xl mx-auto px-6">
-        <h2 className="text-4xl font-bold text-center mb-10">My Projects</h2>
+      {/* Filter Buttons */}
+      <div className="flex justify-center mb-8 gap-4 flex-wrap">
+        {["all", "web", "mobile", "design"].map((cat) => (
+          <button
+            key={cat}
+            onClick={() => setFilter(cat)}
+            className={`px-4 py-2 rounded-full text-sm md:text-base ${
+              filter === cat
+                ? "bg-blue-600 text-white"
+                : "bg-gray-200 text-gray-800 hover:bg-gray-300"
+            }`}
+          >
+            {cat.charAt(0).toUpperCase() + cat.slice(1)}
+          </button>
+        ))}
+      </div>
 
-        {/* Category Filter */}
-        <div className="flex flex-wrap justify-center gap-3 mb-10">
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setSelectedCategory(cat)}
-              className={`px-4 py-2 rounded-full border transition ${
-                selectedCategory === cat
-                  ? "bg-blue-600 border-blue-600"
-                  : "border-white hover:bg-white hover:text-black"
-              }`}
+      {/* Projects Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        {filteredProjects.length === 0 ? (
+          <p className="col-span-full text-center">No projects found.</p>
+        ) : (
+          filteredProjects.map((project) => (
+            <div
+              key={project.id}
+              className="bg-white bg-opacity-90 backdrop-blur-md text-gray-900 rounded-xl shadow hover:shadow-lg transition overflow-hidden"
             >
-              {cat}
-            </button>
-          ))}
-        </div>
-
-        {/* Projects Grid - Scrollable on Mobile */}
-        <div className="overflow-x-auto">
-          <div className="flex md:grid md:grid-cols-3 gap-6 min-w-max md:min-w-0">
-            {filteredProjects.length === 0 ? (
-              <p>No projects found.</p>
-            ) : (
-              filteredProjects.map((project) => (
-                <div
-                  key={project.id}
-                  className="bg-white bg-opacity-90 backdrop-blur-md text-gray-900 rounded-xl shadow hover:shadow-lg transition overflow-hidden min-w-[250px]"
-                >
-                  <img
-                    src={project.image_url}
-                    alt={project.title}
-                    className="w-full h-40 object-cover"
-                  />
-                  <div className="p-4">
-                    <h3 className="text-lg font-bold">{project.title}</h3>
-                    <p className="text-sm text-gray-600">{project.category}</p>
-                    {project.project_url && (
-                      <a
-                        href={project.project_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="mt-3 inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-full text-sm transition"
-                      >
-                        View Project
-                      </a>
-                    )}
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
-        </div>
+              <img
+                src={project.image_url}
+                alt={project.title}
+                className="w-full h-40 object-cover"
+              />
+              <div className="p-4">
+                <h3 className="text-lg font-bold">{project.title}</h3>
+                <p className="text-sm text-gray-600">{project.category}</p>
+                {project.project_url && (
+                  <a
+                    href={project.project_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-3 inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-full text-sm transition"
+                  >
+                    View Project
+                  </a>
+                )}
+              </div>
+            </div>
+          ))
+        )}
       </div>
     </section>
   );
